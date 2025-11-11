@@ -1,22 +1,23 @@
 {
-  "name": "frontend",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^7.1.0",
-    "@fortawesome/free-brands-svg-icons": "^7.1.0",
-    "@fortawesome/free-regular-svg-icons": "^7.1.0",
-    "@fortawesome/free-solid-svg-icons": "^7.1.0",
-    "@fortawesome/vue-fontawesome": "^3.1.2",
-    "nuxt": "^4.2.1",
-    "vue": "^3.5.24",
-    "vue-router": "^4.6.3"
-  }
+	"name": "frontend",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"start": "nuxt start"
+	},
+	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^7.1.0",
+		"@fortawesome/free-brands-svg-icons": "^7.1.0",
+		"@fortawesome/free-regular-svg-icons": "^7.1.0",
+		"@fortawesome/free-solid-svg-icons": "^7.1.0",
+		"@fortawesome/vue-fontawesome": "^3.1.2",
+		"nuxt": "^4.2.1",
+		"vue": "^3.5.24",
+		"vue-router": "^4.6.3"
+	}
 }
