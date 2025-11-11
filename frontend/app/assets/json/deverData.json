@@ -1,0 +1,42 @@
+[
+	{
+		"id": 1,
+		"name": "陳元謙",
+		"imgUrl": "/about/devers/1.jpg",
+		"role": "Software",
+		"academic": "國立中央大學太空科學與工程學系",
+		"igId": "abrams_66"
+	},
+	{
+		"id": 2,
+		"name": "吳柏毅",
+		"imgUrl": "/about/devers/2.jpg",
+		"role": "Application",
+		"academic": "國立中央大學太空科學與工程學系",
+		"igId": "wbyyyy.581"
+	},
+	{
+		"id": 3,
+		"name": "魏崇勝",
+		"imgUrl": "/about/devers/3.jpg",
+		"role": "Payload",
+		"academic": "國立中央大學地科院學士班",
+		"igId": "iamwei.77777"
+	},
+	{
+		"id": 4,
+		"name": "何權祐",
+		"imgUrl": "/about/devers/4.jpg",
+		"role": "Feasibility analysis",
+		"academic": "國立中央大學太空科學與工程學系",
+		"igId": "ryan_argonaut"
+	},
+	{
+		"id": 5,
+		"name": "楊皓",
+		"imgUrl": "/about/devers/5.jpg",
+		"role": "Orbit optimization",
+		"academic": "國立中央大學太空科學與工程學系",
+		"igId": "yanghao1020"
+	}
+]
