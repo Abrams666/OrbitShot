@@ -36,23 +36,23 @@ onMounted(() => {
     padding: 20px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    gap: 5%;
+    gap: 20px;
     box-sizing: border-box;
     background-color: var(--bg1);
     border-radius: 10px;
 }
 .deverCard.active {
-    width: 40%;
+    width: 500px;
 }
 .deverCard.inactive {
     width: 90%;
 }
 
 .deverImg {
-    width: 30%;
-    height: 100%;
+    width: 140px;
+    height: 140px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,7 +65,7 @@ onMounted(() => {
 }
 
 .deverInfo {
-    width: 65%;
+    width: 300px;
     height: 100%;
     display: flex;
     flex-direction: column;
