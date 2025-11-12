@@ -6,11 +6,23 @@
 		</a>
 		<nav v-if="showNav" :class="{ active: !isMobile, inactive: isMobile }">
 			<ul :class="{ active: !isMobile, inactive: isMobile }">
-				<li><font-awesome-icon icon="fa-solid fa-house" /><a href="/">Home</a></li>
-				<li><font-awesome-icon icon="fa-solid fa-circle-info" /><a href="/about">About</a></li>
-				<li><font-awesome-icon icon="fa-solid fa-image" /><a href="/sample">Sample</a></li>
-				<li><font-awesome-icon icon="fa-solid fa-cart-shopping" /><a href="/order">Order</a></li>
-				<li><font-awesome-icon icon="fa-solid fa-user" /><a href="/account">Account</a></li>
+				<li :class="{ active: !isMobile, inactive: isMobile }">
+					<a href="/" :class="{ active: !isMobile, inactive: isMobile }"><font-awesome-icon icon="fa-solid fa-house" />Home</a>
+				</li>
+				<li :class="{ active: !isMobile, inactive: isMobile }">
+					<a href="/about" :class="{ active: !isMobile, inactive: isMobile }"><font-awesome-icon icon="fa-solid fa-circle-info" />About</a>
+				</li>
+				<li :class="{ active: !isMobile, inactive: isMobile }">
+					<a href="/sample" :class="{ active: !isMobile, inactive: isMobile }"><font-awesome-icon icon="fa-solid fa-image" />Sample</a>
+				</li>
+				<li :class="{ active: !isMobile, inactive: isMobile }">
+					<a href="/order" :class="{ active: !isMobile, inactive: isMobile }"
+						><font-awesome-icon icon="fa-solid fa-cart-shopping" />Order</a
+					>
+				</li>
+				<li :class="{ active: !isMobile, inactive: isMobile }">
+					<a href="/account" :class="{ active: !isMobile, inactive: isMobile }"><font-awesome-icon icon="fa-solid fa-user" />Account</a>
+				</li>
 			</ul>
 		</nav>
 		<font-awesome-icon id="navSwitch" v-if="isMobile" icon="fa-solid fa-bars" @click="switchNav" />
@@ -92,7 +104,7 @@ nav.inactive {
 	width: 100vw;
 	height: auto;
 	padding-bottom: 10px;
-	background-color: var(--bg2);
+	background-color: var(--bg1);
 	position: fixed;
 	top: 8vh;
 	left: 0;
@@ -132,6 +144,18 @@ ul li {
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+}
+
+ul li.inactive {
+	width: 90%;
+}
+
+ul li a.inactive {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
 }
 
 #navSwitch {
