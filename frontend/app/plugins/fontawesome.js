@@ -17,6 +17,8 @@ import {
 	faCartShopping,
 	faSchool,
 	faBriefcase,
+	faArrowUpRightFromSquare,
+	faKey,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook, faInstagram, faGithub, faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 
@@ -37,7 +39,9 @@ library.add(
 	faCartShopping,
 	faUser,
 	faSchool,
-	faBriefcase
+	faBriefcase,
+	faArrowUpRightFromSquare,
+	faKey
 );
 
 export default defineNuxtPlugin((nuxtApp) => {
