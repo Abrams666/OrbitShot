@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="card">
 			<div class="title">
-				<h1>Login</h1>
+				<h1>Register</h1>
 			</div>
 			<div class="input">
 				<div class="id">
@@ -15,21 +15,26 @@
 					<font-awesome-icon class="icon" icon="fa-solid fa-key" />
 					<input type="password" v-model="pwd" />
 				</div>
+				<div class="pwd">
+					<p>Check Password</p>
+					<font-awesome-icon class="icon" icon="fa-solid fa-key" />
+					<input type="password" v-model="pwdCheck" />
+				</div>
 			</div>
 			<div class="remember">
 				<div>
-					<input type="checkbox" />
-					<p>Remember me</p>
+					<input type="checkbox" v-model="checkBox" />
+					<p>I agree with our rules</p>
 				</div>
-				<a href="/forget">Forget password?</a>
+				<a href="/rule">View rules</a>
 			</div>
 			<div class="btn">
-				<input type="button" value="Submit" @click="login" />
+				<input type="button" value="Submit" @click="submit" />
 				<p class="error">{{ errorMsg }}</p>
 			</div>
 			<div class="register">
-				Don't have an account?
-				<a href="/register">Register</a>
+				Already have an account?
+				<a href="/login">Login</a>
 			</div>
 		</div>
 	</div>
@@ -42,20 +47,31 @@
 const isMobile = ref(false);
 const id = ref("");
 const pwd = ref("");
+const pwdCheck = ref("");
+const checkBox = ref(false);
 const errorMsg = ref("");
 
 //functions
 
-const login = async () => {
+const submit = async () => {
 	errorMsg.value = "";
 	let isErr = 0;
 
 	if (id.value == "") {
-		errorMsg.value += "Account can't be blank,";
+		errorMsg.value += "Account can't be blank.";
 		isErr = 1;
 	}
 	if (pwd.value == "") {
-		errorMsg.value += "Password can't be blank,";
+		errorMsg.value += "Password can't be blank.";
+		isErr = 1;
+	} else {
+		if (pwd.value != pwdCheck.value) {
+			errorMsg.value += "Check your password again.";
+			isErr = 1;
+		}
+	}
+	if (!checkBox.value) {
+		errorMsg.value += "You need to accept our rules.";
 		isErr = 1;
 	}
 
@@ -205,7 +221,7 @@ onMounted(() => {
 }
 
 .error {
-	color: black;
+	color: green;
 	text-align: center;
 }
 </style>
