@@ -1,18 +1,18 @@
 :root {
-    --tc1: white;
-    --bg1: #333;
-    --bg2: #222;
-    --dc1: rgb(0, 174, 255);
+	--tc1: white;
+	--bg1: #333;
+	--bg2: #222;
+	--dc1: #2481e0;
 }
 ::-webkit-scrollbar {
-    display: none;
+	display: none;
 }
 * {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    color: var(--tc1);
-    font-family: Arial, Helvetica, sans-serif;
-    list-style: none;
-    text-decoration: none;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	color: var(--tc1);
+	font-family: Arial, Helvetica, sans-serif;
+	list-style: none;
+	text-decoration: none;
 }
