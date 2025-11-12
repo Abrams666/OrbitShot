@@ -104,7 +104,7 @@ onMounted(() => {
 .container {
 	width: 100vw;
 	height: 100vh;
-	background-image: url("/index/bgc2.webp");
+	background-image: url("/index/bgc3.jpg");
 	background-size: cover;
 	background-position: center;
 	position: fixed;
@@ -221,7 +221,7 @@ onMounted(() => {
 }
 
 .error {
-	color: green;
+	color: red;
 	text-align: center;
 }
 </style>

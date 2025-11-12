@@ -56,7 +56,7 @@ section {
 	width: 100vw;
 	height: 100vh;
 	padding: 0;
-	background-image: url("/index/bgc2.webp");
+	background-image: url("/index/bgc3.jpg");
 	background-size: cover;
 	background-position: center;
 	display: flex;
