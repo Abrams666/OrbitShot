@@ -43,6 +43,7 @@ const isMobile = ref(false);
 const id = ref("");
 const pwd = ref("");
 const errorMsg = ref("");
+const URL = "http://localhost:5000/";
 
 //functions
 
@@ -60,17 +61,19 @@ const login = async () => {
 	}
 
 	if (isErr == 0) {
-		// const res = await fetch("http://localhost:5000/api/auth/login", {
-		// 	method: "POST",
-		// 	headers: { "Content-Type": "application/json" },
-		// 	body: JSON.stringify({ id: id.value, pwd: pwd.value }),
-		// });
-		// const data = await res.json();
-		// errorMsg.value = data.message;
-		// if (res.ok) {
-		// 	localStorage.setItem("token", data.token);
-		// 	navigateTo("/");
-		// }
+		const res = await fetch(`${URL}api/auth/login`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ account: id.value, pwd: pwd.value }),
+		});
+		const data = await res.json();
+
+		if (res.status == 200) {
+			localStorage.setItem("token", data.token);
+			navigateTo("/");
+		} else {
+			errorMsg.value = data.message;
+		}
 	}
 };
 

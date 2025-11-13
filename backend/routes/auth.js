@@ -1,48 +1,94 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import User from "../models/User.js";
+import { userModel } from "../models/schema.js";
 
 //config
 dotenv.config();
 const router = express.Router();
+const SECRET_KEY = process.env.JWT_SECRET;
 
 //register
 router.post("/register", async (req, res) => {
 	try {
-		const { id, pwd } = req.body;
-		const exist = await User.findOne({ id });
-		if (exist) {
+		const { account, pwd } = req.body;
+
+		const checkAccCon = {
+			account: account,
+		};
+
+		let result1 = await userModel.findOne(checkAccCon);
+		if (result1 != null) {
 			res.status(400);
 			res.json({ message: "The Account has already existed." });
 			return;
 		}
 
-		const user = await User.create({ id, pwd });
-		res.status(200);
-		res.json({ message: "Succeed." });
+		let result2 = await userModel.find().sort({ id: -1 });
+
+		const newUser = new userModel({ id: result2[0].id + 1, account: account, password: pwd, status: "active" });
+		await newUser.save();
+
+		const token = jwt.sign({ id: result2[0].id + 1, name: newUser.account }, SECRET_KEY, { expiresIn: "1h" });
+		res.status(201);
+		res.json({ message: "Succeed.", token });
 	} catch (err) {
 		res.status(500);
-		res.json({ message: "Server Error:(" });
+		res.json({ message: "Server Error." });
 	}
 });
 
 //login
 router.post("/login", async (req, res) => {
 	try {
-		const { id, pwd } = req.body;
-		const user = await User.findOne({ id });
-		if (!user || !(await user.matchPassword(password))) {
+		const { account, pwd } = req.body;
+
+		const checkAccCon = {
+			account: account,
+		};
+		const result1 = await userModel.findOne(checkAccCon);
+		if (!result1) {
 			res.status(401);
-			res.json({ message: "Account or password is wrong." });
+			res.json({ message: "Account is not found." });
 			return;
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-		res.json({ message: "Succeed.", token, id: user._id });
+		const checkAccPwdCon = {
+			account: account,
+			password: pwd,
+		};
+		const result2 = await userModel.findOne(checkAccPwdCon);
+		if (!result2) {
+			res.status(401);
+			res.json({ message: "Password is wrong." });
+			return;
+		}
+
+		const token = jwt.sign({ id: result2.id, name: result2.account }, SECRET_KEY, { expiresIn: "1h" });
+		res.status(200);
+		res.json({ message: "Succeed.", token });
 	} catch (err) {
 		res.status(500);
-		res.json({ message: "Server Error:(" });
+		res.json({ message: "Server Error." });
+	}
+});
+
+router.post("/verify", async (req, res, next) => {
+	const { token } = req.body;
+	if (!token) {
+		res.status(400);
+		res.json({ message: "Token not found." });
+		return;
+	}
+
+	const tokenMain = authHeader.split(" ")[1];
+
+	try {
+		const tokenDecoded = jwt.verify(tokenMain, SECRET_KEY);
+		req.user = tokenDecoded;
+		res.status(200).json({ message: "Token is ok." });
+	} catch (err) {
+		res.status(401).json({ message: "Token is invalid." });
 	}
 });
 

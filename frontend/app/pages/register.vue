@@ -50,6 +50,7 @@ const pwd = ref("");
 const pwdCheck = ref("");
 const checkBox = ref(false);
 const errorMsg = ref("");
+const URL = "http://localhost:5000/";
 
 //functions
 
@@ -76,17 +77,19 @@ const submit = async () => {
 	}
 
 	if (isErr == 0) {
-		// const res = await fetch("http://localhost:5000/api/auth/login", {
-		// 	method: "POST",
-		// 	headers: { "Content-Type": "application/json" },
-		// 	body: JSON.stringify({ id: id.value, pwd: pwd.value }),
-		// });
-		// const data = await res.json();
-		// errorMsg.value = data.message;
-		// if (res.ok) {
-		// 	localStorage.setItem("token", data.token);
-		// 	navigateTo("/");
-		// }
+		const res = await fetch(`${URL}api/auth/register`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ account: id.value, pwd: pwd.value }),
+		});
+		const data = await res.json();
+
+		if (res.status == 201) {
+			localStorage.setItem("token", data.token);
+			navigateTo("/");
+		} else {
+			errorMsg.value = data.message;
+		}
 	}
 };
 

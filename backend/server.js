@@ -1,17 +1,17 @@
 //import
-const http = require("http");
-const url = require("url");
-const dotenv = require("dotenv");
-const mongoose = require("mongoose");
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const path = require("path");
-const cors = require("cors");
-const app = express();
+import http from "http";
+import url from "url";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import express from "express";
+import cookieParser from "cookie-parser";
+import path from "path";
+import cors from "cors";
 import authRoutes from "./routes/auth.js";
 
 //config
 dotenv.config({ path: ".env" });
+const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
