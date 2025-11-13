@@ -76,6 +76,7 @@ const submit = async () => {
 		isErr = 1;
 	}
 
+	//
 	if (isErr == 0) {
 		const res = await fetch(`${URL}api/auth/register`, {
 			method: "POST",
