@@ -1,14 +1,11 @@
-FROM node:18
+FROM node:lts-alpine
 
-WORKDIR /app
+WORKDIR /app/backend
 
-COPY package*.json ./
+COPY package.json .
+
 RUN npm install
 
-COPY . .
-
-# nodemon 需要全域或本地安裝
-RUN npm install -g nodemon
-
 EXPOSE 5000
-CMD ["nodemon", "server.js"]
+
+CMD ["/bin/ash", "-c", "npm i && npm run start"]

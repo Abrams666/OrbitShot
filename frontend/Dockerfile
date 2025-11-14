@@ -1,13 +1,16 @@
-FROM node:18
+FROM node:lts-alpine
 
-USER root
+WORKDIR /app/frontend
 
-WORKDIR /app
+COPY package.json .
 
-COPY package*.json ./
+RUN rm -rf node_modules package-lock.json
+RUN npm cache clean --force
 RUN npm install
 
-COPY . .
+COPY nuxt.config.ts .
+COPY tsconfig.json .
 
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+
+CMD ["/bin/ash", "-c", "npm i && npm run build && npm run start"]
