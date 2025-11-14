@@ -70,7 +70,7 @@ const login = async () => {
 
 		if (res.status == 200) {
 			localStorage.setItem("token", data.token);
-			navigateTo("/");
+			window.location.href = "/";
 		} else {
 			errorMsg.value = data.message;
 		}

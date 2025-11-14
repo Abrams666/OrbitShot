@@ -6,7 +6,24 @@
 			</h1>
 			<font-awesome-icon id="down" icon="fa-solid fa-angle-down" bounce />
 		</section>
-		<section class="section2" id=""></section>
+		<section class="section2" id="whatIsTitle">
+			<h1>What is OrbitShot</h1>
+			<div id="whatIsContent">
+				<p>
+					We are building a cutting-edge platform for delivering and selling high-quality satellite imagery. By leveraging multi-band
+					optical satellites, the platform will provide accurate and timely space-based data to empower applications across weather
+					forecasting, environmental monitoring, precision agriculture, land management, and urban planning.
+				</p>
+				<img src="" alt="" />
+			</div>
+		</section>
+		<section class="section1" id="">
+			<h2>Our Mission</h2>
+			<div>
+				<p></p>
+				<img src="" alt="" />
+			</div>
+		</section>
 	</div>
 </template>
 
@@ -88,5 +105,36 @@ h1.inactive {
 	top: 90%;
 	left: 50%;
 	transform: translateX(-50%);
+}
+
+#whatIsTitle {
+	padding: 5%;
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: center;
+	gap: 30px;
+}
+
+#whatIsContent {
+	width: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: row;
+	align-items: start;
+	justify-content: space-evenly;
+	gap: 10%;
+}
+
+#whatIsContent p {
+	width: 55%;
+	height: auto;
+	font-size: larger;
+}
+
+#whatIsContent img {
+	width: 35%;
+	height: auto;
 }
 </style>

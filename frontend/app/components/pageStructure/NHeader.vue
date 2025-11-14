@@ -21,7 +21,9 @@
 					>
 				</li>
 				<li :class="{ active: !isMobile, inactive: isMobile }">
-					<a href="/account" :class="{ active: !isMobile, inactive: isMobile }"><font-awesome-icon icon="fa-solid fa-user" />Account</a>
+					<a :href="accUrl" :class="{ active: !isMobile, inactive: isMobile }"
+						><font-awesome-icon icon="fa-solid fa-user" />{{ accText }}</a
+					>
 				</li>
 			</ul>
 		</nav>
@@ -33,6 +35,11 @@
 //values
 const isMobile = ref(false);
 const showNav = ref(true);
+const accUrl = ref("/login");
+const accText = ref("Login");
+const URL = "http://localhost:5000/";
+const userId = ref(0);
+const userName = ref("");
 
 //functions
 const switchNav = () => {
@@ -40,7 +47,40 @@ const switchNav = () => {
 };
 
 //run
-onMounted(() => {
+onMounted(async () => {
+	//token
+	const token = localStorage.getItem("token");
+
+	//verify
+	if (token != null) {
+		console.log(token);
+		const res = await fetch(`${URL}api/auth/verify`, {
+			method: "POST",
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		const data = await res.json();
+		console.log("Hello", data.decodedToken.name);
+
+		if (res.status == 200) {
+			userId.value = data.decodedToken.id;
+			userName.value = data.decodedToken.name;
+		} else {
+			localStorage.removeItem("token");
+			userId.value = 0;
+		}
+	} else {
+		userId.value = 0;
+	}
+
+	if (userId.value == 0) {
+		accUrl.value = "/login";
+		accText.value = "Login";
+	} else {
+		accUrl.value = "/account";
+		accText.value = userName;
+	}
+
+	//window size
 	if (window.innerWidth < window.innerHeight) {
 		isMobile.value = true;
 		showNav.value = false;

@@ -74,20 +74,23 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/verify", async (req, res, next) => {
-	const { token } = req.body;
-	if (!token) {
+	const authHeader = req.headers.authorization;
+	if (!authHeader) {
 		res.status(400);
 		res.json({ message: "Token not found." });
 		return;
 	}
 
-	const tokenMain = authHeader.split(" ")[1];
+	const token = authHeader.split(" ")[1]; // 去掉 "Bearer"
 
 	try {
-		const tokenDecoded = jwt.verify(tokenMain, SECRET_KEY);
-		req.user = tokenDecoded;
-		res.status(200).json({ message: "Token is ok." });
+		const tokenDecoded = jwt.verify(token, SECRET_KEY);
+		res.status(200).json({
+			message: "Token is ok.",
+			decodedToken: tokenDecoded,
+		});
 	} catch (err) {
+		console.log("Verify Error:", err);
 		res.status(401).json({ message: "Token is invalid." });
 	}
 });
