@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { userModel } from "../models/schema.js";
 
 //config
-dotenv.config();
+dotenv.config({ path: "../.env" });
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET;
 
