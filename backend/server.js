@@ -8,9 +8,10 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
 import authRoutes from "./routes/auth.js";
+import orderRoutes from "./routes/order.js";
 
 //config
-dotenv.config({ path: "../.env" });
+dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -31,4 +32,5 @@ mongoose
 
 //listen
 app.use("/api/auth", authRoutes);
+app.use("/api/order", orderRoutes);
 app.listen(PORT, () => console.log(`Server running on port ${PORT}...`));

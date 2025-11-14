@@ -53,15 +53,15 @@ onMounted(async () => {
 
 	//verify
 	if (token != null) {
-		console.log(token);
+		//console.log(token);
 		const res = await fetch(`${URL}api/auth/verify`, {
 			method: "POST",
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		const data = await res.json();
-		console.log("Hello", data.decodedToken.name);
 
 		if (res.status == 200) {
+			const data = await res.json();
+			console.log("Hello", data.decodedToken.name);
 			userId.value = data.decodedToken.id;
 			userName.value = data.decodedToken.name;
 		} else {

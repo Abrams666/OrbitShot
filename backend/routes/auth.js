@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { userModel } from "../models/schema.js";
 
 //config
-dotenv.config({ path: "../.env" });
+dotenv.config();
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET;
 
@@ -81,7 +81,7 @@ router.post("/verify", async (req, res, next) => {
 		return;
 	}
 
-	const token = authHeader.split(" ")[1]; // 去掉 "Bearer"
+	const token = authHeader.split(" ")[1];
 
 	try {
 		const tokenDecoded = jwt.verify(token, SECRET_KEY);
