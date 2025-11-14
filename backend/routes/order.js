@@ -33,9 +33,35 @@ router.post("/getcart", async (req, res) => {
 			status: 1,
 		};
 		const result1 = await orderModel.find(findItemCon);
-		console.log(result1);
 		res.status(200);
 		res.json({ data: result1 });
+	} catch (err) {
+		res.status(500);
+		res.json({ message: "Server Error." });
+	}
+});
+
+//getorder
+router.post("/getorder", async (req, res) => {
+	try {
+		const { ownerId } = req.body;
+
+		const findItemCon2 = {
+			ownerId: ownerId,
+			status: 2,
+		};
+
+		const findItemCon3 = {
+			ownerId: ownerId,
+			status: 3,
+		};
+
+		const result1 = await orderModel.find(findItemCon2);
+		const result2 = await orderModel.find(findItemCon3);
+		result = result1 + result2;
+
+		res.status(200);
+		res.json({ data: result });
 	} catch (err) {
 		res.status(500);
 		res.json({ message: "Server Error." });

@@ -24,8 +24,6 @@ const props = defineProps({
 
 //run
 onMounted(() => {
-	console.log(id);
-
 	if (window.innerWidth < window.innerHeight) {
 		isMobile.value = true;
 	} else {

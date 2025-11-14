@@ -81,7 +81,7 @@ onMounted(async () => {
 
 #items {
 	width: 96%;
-	height: 81%;
+	height: 75%;
 	padding: 2%;
 	background-color: var(--bg2);
 	border-radius: 10px;

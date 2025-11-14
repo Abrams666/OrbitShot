@@ -1,36 +1,58 @@
 <template>
 	<div id="order">
-		<div id="items"></div>
+		<div id="items">
+			<cartCard v-for="item in itemData" :key="item.id" :id="item.id" :long="item.longtitude" :lat="item.latitude" />
+		</div>
 	</div>
 </template>
 
 <script setup>
+//import
+import cartCard from "./cartCard.vue";
+
 //values
 const isMobile = ref(false);
 const URL = "http://localhost:5000/";
+let itemData = ref([]);
 
 //function
 
 //run
 onMounted(async () => {
-	//get item
-	const res = await fetch(`${URL}api/order/get`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ account: id.value, pwd: pwd.value }),
-	});
-	const data = await res.json();
-	console.log("Hello", data.decodedToken.name);
+	//token
+	const token = localStorage.getItem("token");
 
-	if (res.status == 200) {
-		userId.value = data.decodedToken.id;
-		userName.value = data.decodedToken.name;
+	//verify
+	if (token != null) {
+		const res = await fetch(`${URL}api/auth/verify`, {
+			method: "POST",
+			headers: { Authorization: `Bearer ${token}` },
+		});
+
+		if (res.status == 200) {
+			const data = await res.json();
+			const res2 = await fetch(`${URL}api/order/getorder`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ ownerId: data.decodedToken.id }),
+			});
+
+			if (res2.status == 200) {
+				const data2 = await res2.json();
+				itemData.value = data2.data;
+				console.log(itemData.value);
+			} else {
+				window.location.href = "/order";
+			}
+		} else {
+			localStorage.removeItem("token");
+			window.location.href = "/login";
+		}
 	} else {
-		localStorage.removeItem("token");
-		userId.value = 0;
 		window.location.href = "/login";
 	}
 
+	//window size
 	if (window.innerWidth < window.innerHeight) {
 		isMobile.value = true;
 	} else {
@@ -54,8 +76,9 @@ onMounted(async () => {
 }
 
 #items {
-	width: 100%;
-	height: 100%;
+	width: 96%;
+	height: 90%;
+	padding: 2%;
 	background-color: var(--bg2);
 	border-radius: 10px;
 	display: flex;
