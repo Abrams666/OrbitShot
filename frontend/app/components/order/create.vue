@@ -1,10 +1,24 @@
 <template>
 	<div id="create">
-		<div id="items"></div>
+		<div id="inputs">
+			<h2>Creat New Order</h2>
+			<div>
+				<p>Latitude</p>
+				<input type="text" />
+			</div>
+			<div>
+				<p>Longitude</p>
+				<input type="text" />
+			</div>
+			<input type="button" value="Add to Cart" />
+		</div>
+		<div></div>
 	</div>
 </template>
 
 <script setup>
+//import
+
 //values
 const isMobile = ref(false);
 
@@ -34,8 +48,8 @@ onMounted(() => {
 	justify-content: space-between;
 }
 
-#items {
-	width: 100%;
+#inputs {
+	width: 30%;
 	height: 100%;
 	background-color: var(--bg2);
 	border-radius: 10px;

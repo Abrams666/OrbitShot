@@ -1,51 +1,42 @@
 <template>
-	<section>
-		<div id="page">
-			<input type="button" @click="newOrder" value="New Order" />
-			<input type="button" @click="cart" value="Cart" />
-			<input type="button" @click="myOrder" value="My Order" />
-		</div>
-		<div id="com">
-			<creatCom v-if="showCreate" />
-			<cartCom v-if="showCart" />
-			<orderCom v-if="showOrder" />
+	<section id="create">
+		<div id="glass">
+			<div id="inputs">
+				<h2>Creat New Order</h2>
+				<div>
+					<div class="in">
+						<p>Latitude</p>
+						<p class="err">{{ laterr }}</p>
+					</div>
+					<input type="text" v-bind="lat" />
+				</div>
+				<div>
+					<div class="in">
+						<p>Longitude</p>
+						<p class="err">{{ longerr }}</p>
+					</div>
+					<input type="text" v-bind="long" />
+				</div>
+				<input id="submit" type="button" value="Add to Cart" @click="submit" />
+			</div>
+			<div id="animate"></div>
 		</div>
 	</section>
 </template>
 
 <script setup>
-//import
-import creatCom from "../components/order/create.vue";
-import orderCom from "../components/order/order.vue";
-import cartCom from "../components/order/cart.vue";
-
 //values
 const isMobile = ref(false);
 const userId = ref(0);
 const userName = ref("");
 const URL = "http://localhost:5000/";
-const showCreate = ref(true);
-const showCart = ref(false);
-const showOrder = ref(false);
+const laterr = ref("");
+const longerr = ref("");
+const lat = ref("");
+const long = ref("");
 
 //functions
-const newOrder = () => {
-	showCreate.value = true;
-	showCart.value = false;
-	showOrder.value = false;
-};
-
-const cart = () => {
-	showCreate.value = false;
-	showCart.value = true;
-	showOrder.value = false;
-};
-
-const myOrder = () => {
-	showCreate.value = false;
-	showCart.value = false;
-	showOrder.value = true;
-};
+const submit = () => {};
 
 //run
 onMounted(async () => {
@@ -84,48 +75,94 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-section {
-	width: 96%;
-	height: 84vh;
-	padding: 2%;
-	padding-top: 13vh;
-	padding-bottom: 3vh;
-	background-color: var(--bg2);
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: start;
+input:focus {
+	outline: none;
 }
 
-#page {
+#create {
+	width: 100vw;
+	height: 100vh;
+	background-image: url("/index/bgc3.jpg");
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#glass {
 	width: 100%;
-	height: 10%;
+	height: 85vh;
+	padding: 5vh;
+	padding-top: 10vh;
+	backdrop-filter: blur(10px);
 	display: flex;
 	flex-direction: row;
-	align-items: end;
+	align-items: center;
 	justify-content: space-between;
 }
 
-#page input {
-	width: 33%;
-	height: 100%;
-	font-size: large;
-	background-color: var(--bg1);
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
+#inputs {
+	width: 30%;
+	height: auto;
+	padding: 2%;
+	backdrop-filter: blur(20px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+}
+
+#inputs div {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: start;
+	gap: 5px;
+}
+
+#inputs div input {
+	width: 95%;
+	height: 40px;
+	padding-left: 5%;
+	border-radius: 999px;
+	background-color: transparent;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+#submit {
+	width: 100%;
+	height: 40px;
+	background-color: var(--dc1);
+	border-radius: 999px;
 	transition: transform 0.5s;
 }
 
-#page input:hover {
+#submit:hover {
 	transform: scale(1.05);
 	transition: transform 0.5s;
 }
 
-#com {
-	width: 100%;
-	height: 90%;
+#animate {
+	width: 60%;
+	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	background-color: var(--dc1);
+}
+
+.err {
+	color: red;
+}
+
+.in {
+	width: 100%;
+	height: auto;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: start;
+	flex-wrap: nowrap;
 }
 </style>

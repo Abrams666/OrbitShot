@@ -159,10 +159,10 @@ onMounted(() => {
 }
 .id input,
 .pwd input {
-	width: 100%;
+	width: 95%;
 	height: 35px;
 	color: var(--tc1);
-	padding-left: 15px;
+	padding-left: 5%;
 	padding-right: 0px;
 	font-size: medium;
 	background-color: transparent;
@@ -220,7 +220,7 @@ onMounted(() => {
 	height: 15px;
 	margin-top: -15px;
 	position: relative;
-	left: 290px;
+	right: -90%;
 	top: 30px;
 }
 
