@@ -37,13 +37,14 @@
 
 <script setup>
 //import
+import env from "../assets/json/env.json";
 
 //values
 const isMobile = ref(false);
 const id = ref("");
 const pwd = ref("");
 const errorMsg = ref("");
-const URL = "http://localhost:5000/";
+const URL = env.URL;
 
 //functions
 

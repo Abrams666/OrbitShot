@@ -42,6 +42,7 @@
 
 <script setup>
 //import
+import env from "../assets/json/env.json";
 
 //values
 const isMobile = ref(false);
@@ -50,10 +51,9 @@ const pwd = ref("");
 const pwdCheck = ref("");
 const checkBox = ref(false);
 const errorMsg = ref("");
-const URL = "http://localhost:5000/";
+const URL = env.URL;
 
 //functions
-
 const submit = async () => {
 	errorMsg.value = "";
 	let isErr = 0;

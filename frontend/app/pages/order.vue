@@ -31,6 +31,7 @@
 <script setup>
 //import
 import gsap from "gsap";
+import env from "../assets/json/env.json";
 
 //config
 const THREE = await import("three");
@@ -40,7 +41,7 @@ const container = ref(null);
 const isMobile = ref(false);
 const userId = ref(0);
 const userName = ref("");
-const URL = "http://localhost:5000/";
+const URL = env.URL;
 const laterr = ref("");
 const longerr = ref("");
 const lat = ref("");
