@@ -13,4 +13,4 @@ COPY . .
 
 EXPOSE 80
 
-CMD ["/bin/ash", "-c", "npm install && npm run start"]
+CMD ["/bin/ash", "-c", "npm install && npm run build && npm run start"]
