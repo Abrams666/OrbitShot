@@ -9,13 +9,13 @@ const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET;
 
 //creat
-router.post("/creat", async (req, res) => {
+router.post("/create", async (req, res) => {
 	try {
 		const { ownerId, long, lat, status } = req.body;
 		const result1 = await orderModel.find().sort({ id: -1 });
 		const newOrder = new orderModel({ id: result1[0].id + 1, ownerId: ownerId, longtitude: long, latitude: lat, status: 1 });
 		await newOrder.save();
-		res.status(200);
+		res.status(201);
 		res.json({ message: "Order created." });
 	} catch (err) {
 		res.status(500);

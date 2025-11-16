@@ -8,16 +8,17 @@
 						<p>Latitude</p>
 						<p class="err">{{ laterr }}</p>
 					</div>
-					<input type="text" v-bind="lat" />
+					<input type="text" v-model="lat" />
 				</div>
 				<div>
 					<div class="in">
 						<p>Longitude</p>
 						<p class="err">{{ longerr }}</p>
 					</div>
-					<input type="text" v-bind="long" />
+					<input type="text" v-model="long" />
 				</div>
-				<input id="submit" type="button" value="Add to Cart" @click="submit" />
+				<input class="submit" type="button" value="Move to Position" @click="rotateTo" />
+				<input class="submit" type="button" value="Add to Cart" @click="submit" />
 			</div>
 			<div id="animate">
 				<div ref="container" class="earth"></div>
@@ -44,80 +45,113 @@ const laterr = ref("");
 const longerr = ref("");
 const lat = ref("");
 const long = ref("");
-const x = ref(0);
-const y = ref(0);
-const initX = 0.9;
-const initY = 4.8;
-const tartgetX = ref(initX);
-const tartgetY = ref(initY);
+let earth, camera, renderer, scene;
 
 //functions
-const submit = () => {};
+function latLngToVector3(lat, lng, radius = 1) {
+	const phi = (90 - lat) * (Math.PI / 180);
+	const theta = (lng + 180) * (Math.PI / 180);
+
+	return new THREE.Vector3(-radius * Math.sin(phi) * Math.sin(theta), radius * Math.cos(phi), radius * Math.sin(phi) * Math.cos(theta));
+}
+
+const submit = async () => {
+	laterr.value = "";
+	longerr.value = "";
+	let isErr = 0;
+
+	if (lat.value == "") {
+		laterr.value += "Latitude can't be empty.";
+		isErr = 1;
+	} else {
+		console.log(parseFloat(lat.value));
+		if (!parseFloat(lat.value)) {
+			laterr.value += "Latitude should be a number.";
+			isErr = 1;
+		} else if (parseFloat(lat.value) > 90 || parseFloat(lat.value) < -90) {
+			laterr.value += "Latitude should between 90 to -90.";
+			isErr = 1;
+		}
+	}
+
+	if (long.value == "") {
+		longerr.value += "Longtitude can't be empty.";
+		isErr = 1;
+	} else {
+		if (parseFloat(long.value) == NaN) {
+			longerr.value += "Longtitude should be a number.";
+			isErr = 1;
+		} else if (parseFloat(long.value) > 180 || parseFloat(long.value) < -180) {
+			longerr.value += "Longtitude should between 180 to -180.";
+			isErr = 1;
+		}
+	}
+
+	if (isErr == 0) {
+		rotateTo();
+
+		const res = await fetch(`${URL}api/order/create`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ ownerId: userId.value, long: long.value, lat: lat.value, status: 1 }),
+		});
+
+		if (res.status == 201) {
+			alert("This new order has been added to your cart:)");
+		} else {
+			laterr.value("Server error.");
+		}
+	}
+};
+
+function initThree() {
+	scene = new THREE.Scene();
+
+	camera = new THREE.PerspectiveCamera(75, container.value.clientWidth / container.value.clientHeight, 0.1, 1000);
+	camera.position.z = 2;
+
+	renderer = new THREE.WebGLRenderer({ antialias: true });
+	renderer.setSize(container.value.clientWidth, container.value.clientHeight);
+	container.value.appendChild(renderer.domElement);
+
+	// 球體（地球）
+	const geometry = new THREE.SphereGeometry(1, 64, 64);
+	const texture = new THREE.TextureLoader().load("/order/map.jpg");
+	const material = new THREE.MeshStandardMaterial({ map: texture });
+
+	earth = new THREE.Mesh(geometry, material);
+	scene.add(earth);
+
+	// 燈光
+	const light = new THREE.DirectionalLight(0xffffff, 1);
+	light.position.set(5, 5, 5);
+	scene.add(light);
+}
+
+const animate = () => {
+	requestAnimationFrame(animate);
+	renderer.render(scene, camera);
+};
+
+function rotateTo() {
+	const target = latLngToVector3(lat.value, long.value, 1);
+
+	const quaternion = new THREE.Quaternion();
+	quaternion.setFromUnitVectors(target.clone().normalize(), new THREE.Vector3(0, 0, 1));
+
+	gsap.to(earth.quaternion, {
+		x: quaternion.x,
+		y: quaternion.y,
+		z: quaternion.z,
+		w: quaternion.w,
+		duration: 1.5,
+		ease: "power2.out",
+	});
+}
 
 //run
 onMounted(async () => {
-	// x.value = lat.value;
-	// y.value = long.value;
-
-	// tartgetX.value = x + initX;
-	// tartgetY.value = y + initY;
-
-	const width = container.value.clientWidth;
-	const height = container.value.clientHeight;
-
-	//scene
-	const scene = new THREE.Scene();
-
-	//camera
-	const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-	camera.position.z = 2;
-
-	//render
-	const renderer = new THREE.WebGLRenderer({ antialias: true });
-	renderer.setSize(width, height);
-	container.value.appendChild(renderer.domElement);
-
-	//texture
-	const textureLoader = new THREE.TextureLoader();
-	const earthTexture = textureLoader.load("/order/map.jpg");
-
-	//earth
-	const geometry = new THREE.SphereGeometry(1, 32, 32);
-	const material = new THREE.MeshStandardMaterial({
-		map: earthTexture,
-	});
-	const sphere = new THREE.Mesh(geometry, material);
-	scene.add(sphere);
-
-	//light
-	const light1 = new THREE.DirectionalLight(0xffffff, 1);
-	const light2 = new THREE.DirectionalLight(0xffffff, 1);
-	//light1.position.set(-5, -5, 5);
-	light2.position.set(5, 5, 5);
-	//scene.add(light1);
-	scene.add(light2);
-
-	//move
-	const animate = () => {
-		requestAnimationFrame(animate);
-		sphere.rotation.y += 0.005;
-		sphere.rotation.x = 0;
-
-		// if (tartgetY - sphere.rotation.y > 0) {
-		// 	sphere.rotation.y += 0.01;
-		// } else if (tartgetY - sphere.rotation.y < 0) {
-		// 	sphere.rotation.y -= 0.01;
-		// }
-
-		// if (tartgetX - sphere.rotation.x > 0) {
-		// 	sphere.rotation.x += 0.01;
-		// } else if (tartgetX - sphere.rotation.x < 0) {
-		// 	sphere.rotation.x -= 0.01;
-		// }
-
-		renderer.render(scene, camera);
-	};
-
+	initThree();
 	animate();
 
 	//token
@@ -214,7 +248,7 @@ input:focus {
 	border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-#submit {
+.submit {
 	width: 100%;
 	height: 40px;
 	background-color: var(--dc1);
@@ -222,7 +256,7 @@ input:focus {
 	transition: transform 0.5s;
 }
 
-#submit:hover {
+.submit:hover {
 	transform: scale(1.05);
 	transition: transform 0.5s;
 }
