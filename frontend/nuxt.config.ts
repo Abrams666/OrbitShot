@@ -9,4 +9,12 @@ export default defineNuxtConfig({
 			meta: [{ name: "description", content: "高解析太空影像訂製服務" }],
 		},
 	},
+	runtimeConfig: {
+		apiSecret: "",
+		apiBase: "",
+
+		public: {
+			apiBase: "",
+		},
+	},
 });

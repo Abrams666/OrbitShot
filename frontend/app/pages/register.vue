@@ -41,11 +41,8 @@
 </template>
 
 <script setup>
-//import
-import dotenv from "dotenv";
-
 //config
-dotenv.config();
+const config = useRuntimeConfig();
 
 //values
 const isMobile = ref(false);
@@ -54,7 +51,7 @@ const pwd = ref("");
 const pwdCheck = ref("");
 const checkBox = ref(false);
 const errorMsg = ref("");
-const URL = process.env.URL;
+const URL = config.public.apiBase;
 
 //functions
 const submit = async () => {
