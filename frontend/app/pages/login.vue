@@ -37,14 +37,17 @@
 
 <script setup>
 //import
-import env from "../assets/json/env.json";
+import dotenv from "dotenv";
+
+//config
+dotenv.config();
 
 //values
 const isMobile = ref(false);
 const id = ref("");
 const pwd = ref("");
 const errorMsg = ref("");
-const URL = env.URL;
+const URL = process.env.URL;
 
 //functions
 

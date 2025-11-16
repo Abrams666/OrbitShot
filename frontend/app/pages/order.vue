@@ -31,17 +31,18 @@
 <script setup>
 //import
 import gsap from "gsap";
-import env from "../assets/json/env.json";
+import dotenv from "dotenv";
 
 //config
 const THREE = await import("three");
 const container = ref(null);
+dotenv.config();
 
 //values
 const isMobile = ref(false);
 const userId = ref(0);
 const userName = ref("");
-const URL = env.URL;
+const URL = process.env.URL;
 const laterr = ref("");
 const longerr = ref("");
 const lat = ref("");

@@ -18,13 +18,16 @@
 import creatCom from "../components/order/create.vue";
 import orderCom from "../components/order/order.vue";
 import cartCom from "../components/order/cart.vue";
-import env from "../assets/json/env.json";
+import dotenv from "dotenv";
+
+//config
+dotenv.config();
 
 //values
 const isMobile = ref(false);
 const userId = ref(0);
 const userName = ref("");
-const URL = env.URL;
+const URL = process.env.URL;
 const showAccount = ref(true);
 const showCart = ref(false);
 const showOrder = ref(false);
