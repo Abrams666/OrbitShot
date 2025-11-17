@@ -17,7 +17,7 @@
 					</div>
 					<input type="text" v-model="long" />
 				</div>
-				<input class="submit" type="button" value="Move to Position" @click="rotateTo" />
+				<input class="submit" type="button" value="Reset" @click="reset" />
 				<input class="submit" type="button" value="Add to Cart" @click="submit" />
 			</div>
 			<div id="animate">
@@ -46,6 +46,11 @@ const laterr = ref("");
 const longerr = ref("");
 const lat = ref("");
 const long = ref("");
+const latv = ref(0);
+const longv = ref(0);
+const lastlatv = ref(0);
+const lastlongv = ref(0);
+const initlong = ref(90);
 let earth, camera, renderer, scene;
 
 //functions
@@ -56,37 +61,51 @@ function latLngToVector3(lat, lng, radius = 1) {
 	return new THREE.Vector3(-radius * Math.sin(phi) * Math.sin(theta), radius * Math.cos(phi), radius * Math.sin(phi) * Math.cos(theta));
 }
 
-const submit = async () => {
+const dataVerify = () => {
 	laterr.value = "";
 	longerr.value = "";
 	let isErr = 0;
 
-	if (lat.value == "") {
+	if (lat.value === "") {
 		laterr.value += "Latitude can't be empty.";
 		isErr = 1;
 	} else {
-		console.log(parseFloat(lat.value));
-		if (!parseFloat(lat.value)) {
+		if (isNaN(parseFloat(lat.value))) {
 			laterr.value += "Latitude should be a number.";
 			isErr = 1;
 		} else if (parseFloat(lat.value) > 90 || parseFloat(lat.value) < -90) {
 			laterr.value += "Latitude should between 90 to -90.";
 			isErr = 1;
+		} else {
+			latv.value += parseFloat(lat.value); // - lastlatv.value;
+			lastlatv.value = latv.value;
 		}
 	}
 
-	if (long.value == "") {
+	if (long.value === "") {
 		longerr.value += "Longtitude can't be empty.";
 		isErr = 1;
 	} else {
-		if (parseFloat(long.value) == NaN) {
+		if (isNaN(parseFloat(long.value))) {
 			longerr.value += "Longtitude should be a number.";
 			isErr = 1;
 		} else if (parseFloat(long.value) > 180 || parseFloat(long.value) < -180) {
 			longerr.value += "Longtitude should between 180 to -180.";
 			isErr = 1;
+		} else {
+			longv.value += parseFloat(long.value); // - lastlongv.value; // + initlong.value;
+			initlong.value = 0;
+			lastlongv.value = longv.value;
 		}
 	}
+
+	console.log(latv.value, longv.value);
+
+	return isErr;
+};
+
+const submit = async () => {
+	let isErr = dataVerify();
 
 	if (isErr == 0) {
 		rotateTo();
@@ -117,7 +136,7 @@ function initThree() {
 
 	// 球體（地球）
 	const geometry = new THREE.SphereGeometry(1, 64, 64);
-	const texture = new THREE.TextureLoader().load("/order/map.jpg");
+	const texture = new THREE.TextureLoader().load("/order/map2.jpg");
 	const material = new THREE.MeshStandardMaterial({ map: texture });
 
 	earth = new THREE.Mesh(geometry, material);
@@ -134,21 +153,30 @@ const animate = () => {
 	renderer.render(scene, camera);
 };
 
-function rotateTo() {
-	const target = latLngToVector3(lat.value, long.value, 1);
+const rotateTo = () => {
+	let isErr = dataVerify();
 
-	const quaternion = new THREE.Quaternion();
-	quaternion.setFromUnitVectors(target.clone().normalize(), new THREE.Vector3(0, 0, 1));
+	if (isErr == 0) {
+		const target = latLngToVector3(latv.value + 0, longv.value + 2, 1);
 
-	gsap.to(earth.quaternion, {
-		x: quaternion.x,
-		y: quaternion.y,
-		z: quaternion.z,
-		w: quaternion.w,
-		duration: 1.5,
-		ease: "power2.out",
-	});
-}
+		const quaternion = new THREE.Quaternion();
+		quaternion.setFromUnitVectors(target.clone().normalize(), new THREE.Vector3(0, 0, 1));
+
+		gsap.to(earth.quaternion, {
+			x: quaternion.x,
+			y: quaternion.y,
+			z: quaternion.z,
+			w: quaternion.w,
+			duration: 1.5,
+			ease: "power2.out",
+		});
+	}
+};
+
+const reset = () => {
+	lat.value = 0;
+	long.value = 0;
+};
 
 //run
 onMounted(async () => {
@@ -157,7 +185,6 @@ onMounted(async () => {
 
 	//token
 	const token = localStorage.getItem("token");
-	console.log("hello");
 
 	//verify
 	if (token != null) {
@@ -186,6 +213,10 @@ onMounted(async () => {
 	} else {
 		isMobile.value = false;
 	}
+});
+
+watch([lat, long], () => {
+	rotateTo();
 });
 </script>
 

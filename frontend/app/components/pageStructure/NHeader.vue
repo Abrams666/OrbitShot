@@ -16,9 +16,10 @@
 					<a href="/sample" :class="{ active: !isMobile, inactive: isMobile }"><font-awesome-icon icon="fa-solid fa-image" />Sample</a>
 				</li>
 				<li :class="{ active: !isMobile, inactive: isMobile }">
-					<a href="/order" :class="{ active: !isMobile, inactive: isMobile }"
-						><font-awesome-icon icon="fa-solid fa-cart-shopping" />Order</a
-					>
+					<a href="/order" :class="{ active: !isMobile, inactive: isMobile }"><font-awesome-icon icon="fa-solid fa-shop" />Order</a>
+				</li>
+				<li :class="{ active: !isMobile, inactive: isMobile }">
+					<a href="/cart" :class="{ active: !isMobile, inactive: isMobile }"><font-awesome-icon icon="fa-solid fa-cart-shopping" />Cart</a>
 				</li>
 				<li :class="{ active: !isMobile, inactive: isMobile }">
 					<a :href="accUrl" :class="{ active: !isMobile, inactive: isMobile }"
@@ -32,12 +33,15 @@
 </template>
 
 <script setup>
+//config
+const config = useRuntimeConfig();
+
 //values
 const isMobile = ref(false);
 const showNav = ref(true);
 const accUrl = ref("/login");
 const accText = ref("Login");
-const URL = "http://localhost:5000/";
+const URL = config.public.apiBase;
 const userId = ref(0);
 const userName = ref("");
 
@@ -53,7 +57,6 @@ onMounted(async () => {
 
 	//verify
 	if (token != null) {
-		//console.log(token);
 		const res = await fetch(`${URL}api/auth/verify`, {
 			method: "POST",
 			headers: { Authorization: `Bearer ${token}` },
@@ -61,7 +64,7 @@ onMounted(async () => {
 
 		if (res.status == 200) {
 			const data = await res.json();
-			console.log("Hello", data.decodedToken.name);
+			//console.log("Hello", data.decodedToken.name);
 			userId.value = data.decodedToken.id;
 			userName.value = data.decodedToken.name;
 		} else {

@@ -14,8 +14,11 @@
 						<font-awesome-icon icon="fa-solid fa-image" /><a href="/sample" :class="{ active: !isMobile, inactive: isMobile }">Sample</a>
 					</li>
 					<li>
-						<font-awesome-icon icon="fa-solid fa-cart-shopping" /><a href="/order" :class="{ active: !isMobile, inactive: isMobile }"
-							>Order</a
+						<font-awesome-icon icon="fa-solid fa-shop" /><a href="/order" :class="{ active: !isMobile, inactive: isMobile }">Order</a>
+					</li>
+					<li>
+						<font-awesome-icon icon="fa-solid fa-cart-shopping" /><a href="/cart" :class="{ active: !isMobile, inactive: isMobile }"
+							>Cart</a
 						>
 					</li>
 					<li>

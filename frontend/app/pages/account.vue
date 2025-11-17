@@ -15,9 +15,7 @@
 
 <script setup>
 //import
-import creatCom from "../components/order/create.vue";
 import orderCom from "../components/order/order.vue";
-import cartCom from "../components/order/cart.vue";
 
 //config
 const config = useRuntimeConfig();
@@ -54,7 +52,6 @@ const myOrder = () => {
 onMounted(async () => {
 	//token
 	const token = localStorage.getItem("token");
-	console.log("hello");
 
 	//verify
 	if (token != null) {

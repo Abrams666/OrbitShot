@@ -68,4 +68,42 @@ router.post("/getorder", async (req, res) => {
 	}
 });
 
+//delete
+router.post("/delete", async (req, res) => {
+	try {
+		const { id } = req.body;
+
+		const deleteCon = {
+			id: id,
+		};
+
+		const result1 = await orderModel.deleteOne(deleteCon);
+
+		res.status(200);
+		res.json({ data: result1 });
+	} catch (err) {
+		res.status(500);
+		res.json(err);
+	}
+});
+
+//getPayItem
+router.post("/getPayItem", async (req, res) => {
+	try {
+		const { id } = req.body;
+
+		const findItemCon = {
+			id: id,
+		};
+
+		const result = await orderModel.findOne(findItemCon);
+
+		res.status(200);
+		res.json({ data: result });
+	} catch (err) {
+		res.status(500);
+		res.json({ message: "Server Error." });
+	}
+});
+
 export default router;
