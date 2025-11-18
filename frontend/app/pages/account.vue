@@ -1,21 +1,24 @@
 <template>
-	<section>
-		<div id="page">
-			<input type="button" @click="MyAccount" value="My Account" />
-			<input type="button" @click="cart" value="Cart" />
-			<input type="button" @click="myOrder" value="My Order" />
-		</div>
-		<div id="com">
-			<creatCom v-if="showAccount" />
-			<cartCom v-if="showCart" />
+	<div id="account">
+		<nav>
+			<h2><font-awesome-icon icon="fa-solid fa-user" />{{ userName }}</h2>
+			<ul>
+				<li><input type="button" @click="setting" value="Setting" /></li>
+				<li><input type="button" @click="order" value="My Order" /></li>
+				<li><input type="button" id="logout" @click="logout" value="Log out" /></li>
+			</ul>
+		</nav>
+		<div id="coms">
+			<settingCom v-if="showSetting" />
 			<orderCom v-if="showOrder" />
 		</div>
-	</section>
+	</div>
 </template>
 
 <script setup>
 //import
-import orderCom from "../components/order/order.vue";
+import settingCom from "../components/account/setting.vue";
+import orderCom from "../components/account/order.vue";
 
 //config
 const config = useRuntimeConfig();
@@ -25,27 +28,25 @@ const isMobile = ref(false);
 const userId = ref(0);
 const userName = ref("");
 const URL = config.public.apiBase;
-const showAccount = ref(true);
-const showCart = ref(false);
+const showSetting = ref(true);
 const showOrder = ref(false);
 
 //functions
-const nMyAccount = () => {
-	showAccount.value = true;
-	showCart.value = false;
+const setting = () => {
+	showSetting.value = true;
 	showOrder.value = false;
 };
 
-const cart = () => {
-	showAccount.value = false;
-	showCart.value = true;
-	showOrder.value = false;
-};
-
-const myOrder = () => {
-	showAccount.value = false;
-	showCart.value = false;
+const order = () => {
+	showSetting.value = false;
 	showOrder.value = true;
+};
+
+const logout = () => {
+	localStorage.removeItem("token");
+	userId.value = 0;
+	userName.value = "";
+	window.location.href = "/";
 };
 
 //run
@@ -84,48 +85,74 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-section {
-	width: 96%;
-	height: 84vh;
-	padding: 2%;
-	padding-top: 13vh;
-	padding-bottom: 3vh;
+#account {
+	width: 100%;
+	height: auto;
+	min-height: 100vh;
 	background-color: var(--bg2);
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	flex-direction: row;
+	align-items: start;
 	justify-content: start;
 }
 
-#page {
-	width: 100%;
-	height: 10%;
-	display: flex;
-	flex-direction: row;
-	align-items: end;
-	justify-content: space-between;
+h2 {
+	margin-bottom: 20px;
+	margin-left: 10px;
 }
 
-#page input {
-	width: 33%;
-	height: 100%;
-	font-size: large;
+nav {
+	width: 20%;
+	height: auto;
+	min-height: 88vh;
+	padding-top: 12vh;
 	background-color: var(--bg1);
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
-	transition: transform 0.5s;
-}
-
-#page input:hover {
-	transform: scale(1.05);
-	transition: transform 0.5s;
-}
-
-#com {
-	width: 100%;
-	height: 90%;
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	flex-direction: column;
+	align-items: start;
+	justify-content: start;
+}
+
+ul {
+	width: 90%;
+	list-style: none;
+	padding: 5%;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: start;
+	gap: 10px;
+}
+
+li {
+	width: 100%;
+}
+
+li input {
+	width: 100%;
+	padding: 10%;
+	background-color: var(--bg2);
+	border: none;
+	font-size: larger;
+	color: var(--text1);
+	font-size: 1rem;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+#logout {
+	background-color: red;
+}
+
+#coms {
+	width: 80%;
+	height: auto;
+	min-height: 88vh;
+	padding-top: 10vh;
+	padding-bottom: 2vh;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: start;
 }
 </style>

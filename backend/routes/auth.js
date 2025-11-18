@@ -95,4 +95,97 @@ router.post("/verify", async (req, res, next) => {
 	}
 });
 
+router.post("/editname", async (req, res) => {
+	try {
+		const { id, currentPwd, newValue } = req.body;
+
+		const checkAccCon = {
+			id: id,
+			password: currentPwd,
+		};
+		const result1 = await userModel.findOne(checkAccCon);
+		if (!result1) {
+			res.status(401);
+			res.json({ message: "Password is wrong." });
+			return;
+		}
+
+		const result2 = await userModel.updateOne({ id: id }, { $set: { account: newValue } });
+
+		const result3 = await userModel.findOne({ id: id, account: newValue });
+		if (!result3) {
+			res.status(500);
+			res.json({ message: "Server Error." });
+			return;
+		}
+
+		const token = jwt.sign({ id: result3.id, name: result3.account }, SECRET_KEY, { expiresIn: "1h" });
+
+		res.status(200);
+		res.json({ message: "Succeed.", token });
+	} catch (err) {
+		res.status(500);
+		res.json({ message: "Server Error." });
+	}
+});
+
+router.post("/editpassword", async (req, res) => {
+	try {
+		const { id, currentPwd, newValue } = req.body;
+
+		const checkAccCon = {
+			id: id,
+			password: currentPwd,
+		};
+		const result1 = await userModel.findOne(checkAccCon);
+		if (!result1) {
+			res.status(401);
+			res.json({ message: "Password is wrong." });
+			return;
+		}
+
+		const result2 = await userModel.updateOne({ id: id }, { $set: { password: newValue } });
+
+		const result3 = await userModel.findOne({ id: id, password: newValue });
+		if (!result3) {
+			res.status(500);
+			res.json({ message: "Server Error." });
+			return;
+		}
+
+		const token = jwt.sign({ id: result3.id, name: result3.account }, SECRET_KEY, { expiresIn: "1h" });
+
+		res.status(200);
+		res.json({ message: "Succeed.", token });
+	} catch (err) {
+		res.status(500);
+		res.json({ message: "Server Error." });
+	}
+});
+
+router.post("/delete", async (req, res) => {
+	try {
+		const { id, currentPwd } = req.body;
+
+		const checkAccCon = {
+			id: id,
+			password: currentPwd,
+		};
+		const result1 = await userModel.findOne(checkAccCon);
+		if (!result1) {
+			res.status(401);
+			res.json({ message: "Password is wrong." });
+			return;
+		}
+
+		const result2 = await userModel.deleteOne({ id: id });
+
+		res.status(200);
+		res.json({ message: "Succeed." });
+	} catch (err) {
+		res.status(500);
+		res.json({ message: "Server Error." });
+	}
+});
+
 export default router;
