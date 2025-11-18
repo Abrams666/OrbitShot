@@ -5,7 +5,7 @@
 				<h1>Payment</h1>
 				<div id="info">
 					<div id="cards">
-						<div id="front">
+						<div id="front" :class="{ active: !flip, inactive: flip }">
 							<div id="top">
 								<div>
 									<img src="/favicon.ico" alt="" />
@@ -25,18 +25,29 @@
 								</div>
 							</div>
 						</div>
-						<div id="back" disabled></div>
+						<div id="back" :class="{ active: flip, inactive: !flip }">
+							<div id="backTop"></div>
+							<div id="backMid">
+								<input type="text" id="write" v-model="cardName" />
+								<input type="text" v-model="cardCVC" />
+							</div>
+							<div id="backBot">
+								<p>
+									This card must be signed to be valid. Unauthorized use is prohibited. If found, please return to the issuing bank.
+								</p>
+							</div>
+						</div>
+						<button class="flip" @click="toggleFlip">></button>
 					</div>
-					<div id="name"></div>
 				</div>
 				<input type="button" value="Confirm Payment" @click="pay" />
 			</div>
 			<div id="right">
 				<h2>Choosen Items</h2>
 				<div id="items">
-					<cartCard v-for="item in itemData" :key="item.id" :id="item.id" :long="item.longtitude" :lat="item.latitude" />
+					<payCard v-for="item in itemData" :key="item.id" :id="item.id" :long="item.longtitude" :lat="item.latitude" />
 				</div>
-				<h3>Total:</h3>
+				<h3 id="total">Total: ${{ totalMoney }}</h3>
 			</div>
 		</div>
 	</section>
@@ -44,7 +55,7 @@
 
 <script setup>
 //import
-import cartCard from "../components/cart/cartCard.vue";
+import payCard from "../components/cart/payCard.vue";
 
 //config
 const config = useRuntimeConfig();
@@ -60,6 +71,8 @@ const cardName = ref("ABC DEF");
 const cardExpMonth = ref("00");
 const cardExpYear = ref("00");
 const cardCVC = ref("000");
+const totalMoney = ref(0);
+const flip = ref(false);
 const items = useCookie("items", {
 	maxAge: 5 * 60,
 	sameSite: "strict",
@@ -68,6 +81,10 @@ const items = useCookie("items", {
 
 //function
 const pay = () => {};
+
+const toggleFlip = () => {
+	flip.value = !flip.value;
+};
 
 //run
 onMounted(async () => {
@@ -100,7 +117,8 @@ onMounted(async () => {
 					window.location.href = "/order";
 				}
 			}
-			console.log(itemData.value);
+
+			totalMoney.value = itemData.value.length * 300;
 		} else {
 			localStorage.removeItem("token");
 			userId.value = 0;
@@ -215,11 +233,14 @@ onMounted(async () => {
 
 #cards {
 	width: 100%;
-	height: auto;
+	aspect-ratio: 8560 / 4800;
+	position: relative;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: center;
+	justify-content: end;
+	gap: 10px;
+	perspective: 1000px;
 }
 
 #front {
@@ -228,10 +249,32 @@ onMounted(async () => {
 	padding: 5%;
 	background-color: black;
 	border-radius: 15px;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: -40%;
 	display: flex;
 	flex-direction: column;
 	align-items: start;
 	justify-content: space-between;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+#back {
+	width: 70%;
+	aspect-ratio: 8560 / 4800;
+	padding: 5%;
+	background-color: var(--dc1);
+	border-radius: 15px;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: -40%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
 #top {
@@ -243,6 +286,12 @@ onMounted(async () => {
 	justify-content: space-between;
 }
 
+#backTop {
+	width: 114%;
+	height: 25%;
+	background-color: black;
+}
+
 #top div {
 	width: auto;
 	height: 100%;
@@ -251,6 +300,10 @@ onMounted(async () => {
 	align-items: center;
 	justify-content: start;
 	gap: 10px;
+}
+
+input[type="text"] {
+	font-family: "number", sans-serif;
 }
 
 #top div img {
@@ -268,13 +321,51 @@ onMounted(async () => {
 	height: 15%;
 }
 
+#backMid {
+	width: 100%;
+	height: 15%;
+	background-color: white;
+	padding: 3px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#write {
+	font-family: "Handlee-Regular", sans-serif;
+}
+
+#backMid input {
+	width: 20%;
+	height: 100%;
+	background-color: transparent;
+	border: none;
+	border-left: 2px solid black;
+	color: black;
+	font-size: large;
+	text-align: end;
+	font-family: sans-serif;
+}
+
+#backMid input:first-child {
+	width: 80%;
+	height: 100%;
+	background-color: transparent;
+	border: 0;
+	color: black;
+	font-size: large;
+	text-align: start;
+	font-family: "Handlee-Regular", sans-serif;
+}
+
 #mid input {
-	width: fit-content;
+	width: 85%;
 	height: 100%;
 	background-color: transparent;
 	border-bottom: 1px solid var(--tc1);
 	color: var(--tc1);
-	font-size: large;
+	font-size: x-large;
 }
 
 #bot {
@@ -284,6 +375,14 @@ onMounted(async () => {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+}
+
+#backBot {
+	height: auto;
+	background-color: transparent;
+	border: none;
+	color: var(--tc1);
+	font-size: small;
 }
 
 #name {
@@ -313,5 +412,60 @@ onMounted(async () => {
 	color: var(--tc1);
 	font-size: medium;
 	text-align: center;
+}
+
+#total {
+	width: 100%;
+	text-align: end;
+	font-size: large;
+	font-weight: bold;
+}
+
+.flip {
+	background-color: transparent;
+	color: var(--tc1);
+	border: none;
+	cursor: pointer;
+	font-size: x-large;
+}
+
+#front.active,
+#back.active {
+	animation: flip1 0.25s linear forwards;
+}
+
+#front.inactive,
+#back.inactive {
+	animation: flip2 0.25s linear forwards;
+}
+
+@keyframes flip1 {
+	0% {
+		display: none;
+		transform: rotate3d(0, 1, 0, -90deg);
+	}
+	50% {
+		display: flex;
+		transform: rotate3d(0, 1, 0, -90deg);
+	}
+	100% {
+		display: flex;
+		transform: rotate3d(0, 1, 0, 0deg);
+	}
+}
+
+@keyframes flip2 {
+	0% {
+		display: flex;
+		transform: rotate3d(0, 1, 0, 0deg);
+	}
+	50% {
+		display: flex;
+		transform: rotate3d(0, 1, 0, 90deg);
+	}
+	100% {
+		display: none;
+		transform: rotate3d(0, 1, 0, 90deg);
+	}
 }
 </style>

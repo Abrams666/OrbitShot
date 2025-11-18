@@ -16,3 +16,17 @@
 	list-style: none;
 	text-decoration: none;
 }
+
+@font-face {
+	font-family: "number";
+	src: url("/fonts/number.otf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Handlee-Regular";
+	src: url("/fonts/Handlee-Regular.ttf") format("truetype");
+	font-weight: bolder;
+	font-style: normal;
+}
