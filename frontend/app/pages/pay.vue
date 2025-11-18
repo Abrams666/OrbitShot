@@ -14,22 +14,22 @@
 								<img src="/pay/ic.png" alt="" />
 							</div>
 							<div id="mid">
-								<input type="text" v-model="cardNumber" />
+								<input type="text" placeholder="0000 0000 0000 0000" v-model="cardNumber" />
 							</div>
 							<div id="bot">
-								<input type="text" id="name" v-model="cardName" />
+								<input type="text" id="name" placeholder="Your Name" v-model="cardName" />
 								<div id="exp">
-									<input type="text" id="mon" v-model="cardExpMonth" />
+									<input type="text" id="mon" placeholder="MM" v-model="cardExpMonth" />
 									<p>/</p>
-									<input type="text" id="year" v-model="cardExpYear" />
+									<input type="text" id="year" placeholder="YY" v-model="cardExpYear" />
 								</div>
 							</div>
 						</div>
 						<div id="back" :class="{ active: flip, inactive: !flip }">
 							<div id="backTop"></div>
 							<div id="backMid">
-								<input type="text" id="write" v-model="cardName" />
-								<input type="text" v-model="cardCVC" />
+								<input type="text" id="write" placeholder="Your Name" v-model="cardName" />
+								<input type="text" placeholder="123" v-model="cardCVC" />
 							</div>
 							<div id="backBot">
 								<p>
@@ -66,11 +66,11 @@ const URL = config.public.apiBase;
 const userId = ref(0);
 const itemData = ref([]);
 const checkedItems = ref([]);
-const cardNumber = ref("0000 0000 0000 0000");
-const cardName = ref("ABC DEF");
-const cardExpMonth = ref("00");
-const cardExpYear = ref("00");
-const cardCVC = ref("000");
+const cardNumber = ref("");
+const cardName = ref("");
+const cardExpMonth = ref("");
+const cardExpYear = ref("");
+const cardCVC = ref("");
 const totalMoney = ref(0);
 const flip = ref(false);
 const items = useCookie("items", {
@@ -363,7 +363,7 @@ input[type="text"] {
 	width: 85%;
 	height: 100%;
 	background-color: transparent;
-	border-bottom: 1px solid var(--tc1);
+	border-bottom: 0px solid var(--tc1);
 	color: var(--tc1);
 	font-size: x-large;
 }
@@ -389,7 +389,7 @@ input[type="text"] {
 	width: 30%;
 	height: 100%;
 	background-color: transparent;
-	border-bottom: 1px solid var(--tc1);
+	border-bottom: 0px solid var(--tc1);
 	color: var(--tc1);
 	font-size: medium;
 }
@@ -408,7 +408,7 @@ input[type="text"] {
 	width: 20%;
 	height: 100%;
 	background-color: transparent;
-	border-bottom: 1px solid var(--tc1);
+	border-bottom: 0px solid var(--tc1);
 	color: var(--tc1);
 	font-size: medium;
 	text-align: center;
