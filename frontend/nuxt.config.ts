@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 			title: "OrbitShot",
 			meta: [
 				{ name: "description", content: "高解析太空影像訂製服務" },
-				{ name: "google-site-verification", content: "flD5G-N7i0uH2i0uH2i41RYc5xMR77g_zwaD8kPdFdjCZ_1Q" },
+				{ name: "google-site-verification", content: "flD5G-N7i0uH2i41RYc5xMR77g_zwaD8kPdFdjCZ_1Q" },
 			],
 		},
 	},
