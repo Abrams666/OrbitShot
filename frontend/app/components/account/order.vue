@@ -1,26 +1,13 @@
 <template>
 	<section>
-		<h1>Settings</h1>
-		<div>
-			<p class="title">Name:</p>
-			<p class="content">{{ userName }}</p>
-			<button @click="editName">Edit</button>
-		</div>
-		<div>
-			<p class="title">Password:</p>
-			<p class="content">********</p>
-			<button @click="editPassword">Edit</button>
-		</div>
-		<div>
-			<p class="title">Delete Account:</p>
-			<button id="deleteBtn" @click="deleteAccount">Delete</button>
-		</div>
+		<h1>My Order</h1>
+		<div><orderCard v-for="item in items" :key="item.id" :id="item.id" :long="item.long" :lat="item.lat" :status="item.status" /></div>
 	</section>
 </template>
 
 <script setup>
 //import
-// import orderCom from "../components/order/order.vue";
+import orderCard from "./orderCard.vue";
 
 //config
 const config = useRuntimeConfig();
@@ -30,13 +17,9 @@ const isMobile = ref(false);
 const userId = ref(0);
 const userName = ref("");
 const URL = config.public.apiBase;
+const items = ref([]);
 
 //functions
-const deleteAccount = () => {};
-
-const editName = () => {};
-
-const editPassword = () => {};
 
 //run
 onMounted(async () => {
@@ -54,6 +37,21 @@ onMounted(async () => {
 			const data = await res.json();
 			userId.value = data.decodedToken.id;
 			userName.value = data.decodedToken.name;
+
+			const res2 = await fetch(`${URL}api/order/getorder`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ ownerID: userId.value }),
+			});
+
+			const data2 = await res2.json();
+
+			if (res2.status == 200) {
+				items.value = data2.orders;
+			} else {
+				items.value = [];
+				console.error(data2.message);
+			}
 		} else {
 			localStorage.removeItem("token");
 			userId.value = 0;
@@ -85,40 +83,21 @@ section {
 	gap: 20px;
 }
 
+h1 {
+	height: 10%;
+}
+
 div {
-	width: 100%;
-	height: auto;
+	width: 96%;
+	height: 60vh;
+	padding: 2% 2%;
+	background-color: var(--bg1);
+	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
 	align-items: start;
 	justify-content: start;
 	gap: 10px;
-}
-
-.title {
-	font-size: 1.2rem;
-	font-weight: bold;
-}
-
-.content {
-	width: 100%;
-	height: auto;
-	background-color: black;
-	border-bottom: 1px solid var(--dc1);
-	font-size: 1rem;
-}
-
-button {
-	width: auto;
-	height: auto;
-	padding: 5px;
-	background-color: var(--dc1);
-	color: var(--tc1);
-}
-
-#deleteBtn {
-	background-color: red;
-	color: white;
-	border: none;
+	overflow-y: auto;
 }
 </style>
