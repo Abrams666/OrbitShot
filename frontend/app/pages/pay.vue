@@ -73,6 +73,8 @@ const cardExpYear = ref("");
 const cardCVC = ref("");
 const totalMoney = ref(0);
 const flip = ref(false);
+const autoInput = ref(false);
+const isLastBlank = ref(false);
 const items = useCookie("items", {
 	maxAge: 5 * 60,
 	sameSite: "strict",
@@ -84,6 +86,98 @@ const pay = () => {};
 
 const toggleFlip = () => {
 	flip.value = !flip.value;
+};
+
+const checkCardNum = () => {
+	const lastChar = cardNumber.value.charAt(cardNumber.value.length - 1);
+
+	if (cardNumber.value.length > 19) {
+		autoInput.value = true;
+		cardNumber.value = cardNumber.value.slice(0, 19);
+		return;
+	}
+
+	if (isNaN(lastChar)) {
+		autoInput.value = true;
+		cardNumber.value = cardNumber.value.slice(0, -1);
+		return;
+	}
+
+	if (cardNumber.value.length == 5 || cardNumber.value.length == 5 + 5 || cardNumber.value.length == 5 + 5 + 5) {
+		if (lastChar === " ") {
+			isLastBlank.value = true;
+		} else {
+			autoInput.value = true;
+			cardNumber.value = cardNumber.value.slice(0, -1) + " " + lastChar;
+		}
+		return;
+	}
+
+	if ((cardNumber.value.length == 4 || cardNumber.value.length == 4 + 5 || cardNumber.value.length == 4 + 5 + 5) && isLastBlank.value) {
+		autoInput.value = true;
+		cardNumber.value = cardNumber.value.slice(0, -1);
+		return;
+	}
+
+	isLastBlank.value = false;
+};
+
+const checkCardMonth = () => {
+	if (isNaN(cardExpMonth.value)) {
+		cardExpMonth.value = cardExpMonth.value.slice(0, -1);
+	}
+
+	if (cardExpMonth.value.length > 2) {
+		cardExpMonth.value = cardExpMonth.value.slice(1, 3);
+	}
+
+	if (cardExpMonth.value.length == 0) {
+		cardExpMonth.value = "00";
+	}
+
+	if (cardExpMonth.value.length == 1) {
+		cardExpMonth.value = "0" + cardExpMonth.value;
+	}
+};
+
+const checkCardYear = () => {
+	if (isNaN(cardExpYear.value)) {
+		cardExpYear.value = cardExpYear.value.slice(0, -1);
+	}
+
+	if (cardExpYear.value.length > 2) {
+		cardExpYear.value = cardExpYear.value.slice(1, 3);
+	}
+
+	if (cardExpYear.value.length == 0) {
+		cardExpYear.value = "00";
+	}
+
+	if (cardExpYear.value.length == 1) {
+		cardExpYear.value = "0" + cardExpYear.value;
+	}
+};
+
+const checkCardCVC = () => {
+	if (isNaN(cardCVC.value)) {
+		cardCVC.value = cardCVC.value.slice(0, -1);
+	}
+
+	if (cardCVC.value.length > 3) {
+		cardCVC.value = cardCVC.value.slice(1, 4);
+	}
+
+	if (cardCVC.value.length == 0) {
+		cardCVC.value = "000";
+	}
+
+	if (cardCVC.value.length == 1) {
+		cardCVC.value = "00" + cardCVC.value;
+	}
+
+	if (cardCVC.value.length == 2) {
+		cardCVC.value = "0" + cardCVC.value;
+	}
 };
 
 //run
@@ -135,6 +229,25 @@ onMounted(async () => {
 	} else {
 		isMobile.value = false;
 	}
+});
+
+watch(cardNumber, () => {
+	if (!autoInput.value) {
+		checkCardNum();
+	}
+	autoInput.value = false;
+});
+
+watch(cardExpMonth, () => {
+	checkCardMonth();
+});
+
+watch(cardExpYear, () => {
+	checkCardYear();
+});
+
+watch(cardCVC, () => {
+	checkCardCVC();
 });
 </script>
 
