@@ -1,6 +1,6 @@
 <template>
 	<section id="create">
-		<div id="glass">
+		<div id="glass" :class="{ active: !isMobile, inactive: isMobile }">
 			<div id="inputs">
 				<h1>Create New Order</h1>
 				<div>
@@ -128,7 +128,11 @@ function initThree() {
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera(75, container.value.clientWidth / container.value.clientHeight, 0.1, 1000);
-	camera.position.z = 2;
+	if (isMobile.value) {
+		camera.position.z = 2;
+	} else {
+		camera.position.z = 2;
+	}
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.setSize(container.value.clientWidth, container.value.clientHeight);
@@ -174,15 +178,12 @@ const rotateTo = () => {
 };
 
 const reset = () => {
+	initThree();
 	lat.value = 0;
 	long.value = 0;
 };
 
-//run
-onMounted(async () => {
-	initThree();
-	animate();
-
+const verifyToken = async () => {
 	//token
 	const token = localStorage.getItem("token");
 
@@ -213,6 +214,13 @@ onMounted(async () => {
 	} else {
 		isMobile.value = false;
 	}
+};
+
+//run
+onMounted(async () => {
+	await verifyToken();
+	initThree();
+	animate();
 });
 
 watch([lat, long], () => {
@@ -227,9 +235,9 @@ input:focus {
 
 #create {
 	width: 100vw;
-	height: 100vh;
+	height: auto;
+	min-height: 100vh;
 	background-color: black;
-	/* background-image: url("/index/bgc3.jpg"); */
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -319,5 +327,23 @@ input:focus {
 	align-items: center;
 	justify-content: start;
 	flex-wrap: nowrap;
+}
+
+#glass.inactive {
+	flex-direction: column;
+}
+
+#glass.inactive #inputs {
+	width: 80%;
+}
+
+#glass.inactive #animate {
+	width: 90%;
+	aspect-ratio: 1/1;
+}
+
+#glass.inactive #animate .earth {
+	width: 100%;
+	aspect-ratio: 1/1;
 }
 </style>
