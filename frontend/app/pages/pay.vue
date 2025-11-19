@@ -119,6 +119,19 @@ const checkCardNum = () => {
 		return;
 	}
 
+	if (cardNumber.value.length == 16 && cardNumber.value[4] != " " && cardNumber.value[9] != " " && cardNumber.value[14] != " ") {
+		autoInput.value = true;
+		cardNumber.value =
+			cardNumber.value.slice(0, 4) +
+			" " +
+			cardNumber.value.slice(4, 8) +
+			" " +
+			cardNumber.value.slice(8, 12) +
+			" " +
+			cardNumber.value.slice(12, 16);
+		return;
+	}
+
 	isLastBlank.value = false;
 };
 

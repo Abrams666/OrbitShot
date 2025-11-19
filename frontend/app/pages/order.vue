@@ -178,7 +178,6 @@ const rotateTo = () => {
 };
 
 const reset = () => {
-	initThree();
 	lat.value = 0;
 	long.value = 0;
 };

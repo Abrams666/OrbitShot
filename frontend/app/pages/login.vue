@@ -21,7 +21,7 @@
 					<input type="checkbox" />
 					<p>Remember me</p>
 				</div>
-				<a href="/forget">Forget password?</a>
+				<a href="/rule">Forget password?</a>
 			</div>
 			<div class="btn">
 				<input type="button" value="Submit" @click="login" />
