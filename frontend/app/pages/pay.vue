@@ -1,6 +1,6 @@
 <template>
-	<section id="pay">
-		<div id="base">
+	<section id="pay" :class="{ active: !isMobile, inactive: isMobile }">
+		<div id="base" :class="{ active: !isMobile, inactive: isMobile }">
 			<div id="left">
 				<h1>Payment</h1>
 				<div id="info">
@@ -260,6 +260,7 @@ watch(cardCVC, () => {
 	padding-bottom: 2vh;
 	background-image: url("/index/bgc3.jpg");
 	display: flex;
+	flex-direction: row;
 	align-items: center;
 	justify-content: center;
 }
@@ -580,5 +581,28 @@ input[type="text"] {
 		display: none;
 		transform: rotate3d(0, 1, 0, 90deg);
 	}
+}
+
+#base.inactive {
+	flex-direction: column;
+}
+
+#base.inactive #left {
+	width: 95%;
+	border: 0;
+	align-items: center;
+	justify-content: center;
+}
+
+#base.inactive #right {
+	width: 85%;
+}
+
+#base.inactive #mid input {
+	font-size: larger;
+}
+
+#pay.inactive {
+	align-items: start;
 }
 </style>
